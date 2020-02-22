@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Algorithms {
-	
+
 	private Graph searchSpace;
 	private boolean stopCurrentAlg = false;
 
@@ -16,7 +16,7 @@ public class Algorithms {
 	public Algorithms (Graph graph) {
 		searchSpace = graph;
 	}
-	
+
 	public void displayGraph(){												//This will display the graph/cost of all the nodes. the empty spaces are the places where you can not go through
 		System.out.println("Start Coordinates ("+searchSpace.startx+","+searchSpace.starty+")");
 		System.out.println("End Coordinates ("+searchSpace.endx+","+searchSpace.endy+")");
@@ -32,13 +32,13 @@ public class Algorithms {
 			System.out.println();
 		}
 	}
-	
+
 	/*this method will generate the successors*/
-	
+
 	public void successor(){
 		for(int i=0; i<searchSpace.nodes.length;i++){
 			for(int j=0; j<searchSpace.nodes[i].length;j++){
-				
+
 				if( ((i-1)>=0) && ((i-1)<searchSpace.nodes.length) && (searchSpace.nodes[i-1][j].impassable==false) ){					//below
 					searchSpace.nodes[i][j].setBelowSuccessor(searchSpace.nodes[i-1][j]);
 				}
@@ -51,10 +51,11 @@ public class Algorithms {
 				if( ((i+1)>=0) && ((i+1)<searchSpace.nodes.length) && (searchSpace.nodes[i+1][j].impassable==false) ){					//top
 					searchSpace.nodes[i][j].setTopSuccessor(searchSpace.nodes[i+1][j]);
 				}
-				
+
 			}
 		}
 	}
+
 	/*prove that the successors are working correctly*/
 	public void print_successors(int i, int j){
 		System.out.println("successors:");
@@ -81,7 +82,7 @@ public class Algorithms {
 		}
 		System.out.println();
 	}
-	
+
 	public void findPath(Node graph){
 		System.out.print("Reverse path: ");
 		while(graph.comingFrom !=null){
@@ -91,18 +92,18 @@ public class Algorithms {
 		System.out.println("X: ("+graph.coordenateX+", "+graph.coordenateY+") Cost: "+graph.cost);
 
 	}
-	
+
 	/* breadth-first search algorithm*/
 	public void BreadtFirst(){
 		PriorityQueue<Node> nexttoVisit =new PriorityQueue<>(new Comparator<Node>(){
 			@Override
 			public int compare(Node fNode, Node sNode){											//put the smallest in front first
 				return fNode.cost - sNode.cost;													// put sNode fist: compare a big against a smaller will give a bigger value than 0
-																								//leave fNode first: compare a small number against a bigger will give a smaller number than 0
+				//leave fNode first: compare a small number against a bigger will give a smaller number than 0
 			}
 		});
 		int totalCost = 0;
-		
+
 		//for(int i=0; i<searchSpace.nodes[1][3].successors.length; i++){										//check if this queue works
 		//	q.add(searchSpace.nodes[1][3].successors[i]);
 		//}
@@ -110,16 +111,16 @@ public class Algorithms {
 		//	System.out.println(q.remove().cost);
 		//}
 		List<Node> visitedPos = new ArrayList<>();
-		
+
 		nexttoVisit.add(searchSpace.nodes[searchSpace.startx][searchSpace.starty]);							//start
-		
+
 		while(!nexttoVisit.isEmpty()){
-			
-																	//remove the node to continue with the node
+
+			//remove the node to continue with the node
 			Node currentPos = nexttoVisit.remove();
-			
+
 			visitedPos.add(currentPos);								//now the current position will count as visited
-			
+
 			if(currentPos.equals(searchSpace.nodes[searchSpace.endx][searchSpace.endy])){					//Check if we arrived to the goal
 				System.out.println("The path was found" );
 				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);
@@ -136,20 +137,20 @@ public class Algorithms {
 					nexttoVisit.add(successorsOfCurrent[i]);		//add the next node that will need to visit
 					visitedPos.add(successorsOfCurrent[i]);			//add the nodes that are in the nexttoVisit already so we dont repeat
 					successorsOfCurrent[i].comingFrom = currentPos;	//set the nodes where they are coming from
-					
+
 				}
 			}
-			
-			
+
+
 		}
-		
+
 	}
-	
-	
+
+
 	public void iterativeDeepSearch(Node start) {
 		System.out.println("Iterative Deep Search: \n");
 		System.out.println("costo: " + start.cost);
-		
+
 		int depth = 0, nodeNum = 0;
 		do {
 			nodeNum = depthSearch(start, depth);
@@ -167,7 +168,7 @@ public class Algorithms {
 	public int depthSearch(Node problem, int limit) {
 		int nodesExpanded = 1, totalCost = 0;
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
-		
+
 		String nodes = "";
 
 		Stack<Node> fringe = new Stack<>();
@@ -210,5 +211,36 @@ public class Algorithms {
 		System.out.println(nodes);
 		return nodesExpanded;
 	}
-	
+
+	public void aStarSearch(){
+		List<Node> visited = new ArrayList<Node>();
+		List<Node> nextToVisit = new ArrayList<Node>();
+
+		Node start = searchSpace.getStartNode();
+
+		nextToVisit.add(start);
+
+		while(!nextToVisit.isEmpty()){
+
+			Node current = nextToVisit.get(0);
+			nextToVisit.remove(0);
+			List<Node> neighbors = searchSpace.generateSuccessors(current);
+			visited.add(current);
+			for(Node neighbor : neighbors) {
+				
+				if(!visited.contains(neighbor)) {
+					nextToVisit.add(neighbor);
+				}
+				
+			}
+			nextToVisit.sort(Comparator.comparingInt());
+		
+			System.out.print(current);
+
+
+		}
+
+
+	}
+
 }

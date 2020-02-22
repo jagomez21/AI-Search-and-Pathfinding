@@ -47,6 +47,7 @@ public class main {
 			//	}
 			//	System.out.println();
 			//}
+			reader.close();
 
 		}catch(FileNotFoundException e){
 			System.out.println("not working");
@@ -58,15 +59,16 @@ public class main {
 		System.out.println("Hello");
 		Scanner scan = new Scanner(System.in);
 		String file = scan.next();
+		scan.close();
 		//String file2 = "C:\\Users\\User\\Documents\\Java Programs\\SearchAlgorithms\\src\\"+file;
 		Graph g = ReadFile(file);          //read the file and 
 		Algorithms algorithm = new Algorithms(g);
-		algorithm.displayGraph();
+		//algorithm.displayGraph();
 		algorithm.successor();
-		algorithm.print_successors(1,3);
-		algorithm.BreadtFirst();
+		//algorithm.print_successors(1,3);
+		//algorithm.BreadtFirst();
 		
-		algorithm.iterativeDeepSearch(g.getStartNode());
-		
+		//algorithm.iterativeDeepSearch(g.getStartNode());
+		algorithm.aStarSearch();
 	}
 }

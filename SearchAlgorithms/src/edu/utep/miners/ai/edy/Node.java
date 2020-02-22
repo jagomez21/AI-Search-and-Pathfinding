@@ -1,3 +1,4 @@
+package edu.utep.miners.ai.edy;
 
 public class Node {
 	int cost;														//The cost of the node

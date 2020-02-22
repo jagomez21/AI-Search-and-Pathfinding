@@ -1,3 +1,4 @@
+package edu.utep.miners.ai.edy;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -143,6 +144,7 @@ public class Algorithms {
 		}
 		
 	}
+	
 	
 	public void iterativeDeepSearch(Node start) {
 		System.out.println("Iterative Deep Search: \n");

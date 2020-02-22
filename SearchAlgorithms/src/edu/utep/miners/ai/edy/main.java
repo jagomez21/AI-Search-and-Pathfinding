@@ -1,3 +1,4 @@
+package edu.utep.miners.ai.edy;
 import java.util.*;
 import java.io.FileReader;
 import java.io.IOException;

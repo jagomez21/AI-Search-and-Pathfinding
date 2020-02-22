@@ -1,5 +1,6 @@
 package edu.utep.miners.ai.edy;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,16 @@ public class Algorithms {
 					System.out.print(searchSpace.nodes[i][j].cost+" ");
 				}else{
 					System.out.print("  ");
+				}
+			}
+			System.out.println();
+		}
+		for(int i=0; i< searchSpace.nodes.length;i++){
+			for(int j=0; j<searchSpace.nodes[i].length; j++){
+				if(!searchSpace.nodes[i][j].impassable){
+					System.out.print(" ("+searchSpace.nodes[i][j].coordenateX+", "+searchSpace.nodes[i][j].coordenateY+") ");
+				}else{
+					System.out.print(" ( ,  ) ");
 				}
 			}
 			System.out.println();
@@ -224,8 +235,14 @@ public class Algorithms {
 
 			Node current = nextToVisit.get(0);
 			nextToVisit.remove(0);
+			
+			while(visited.contains(current)){									//This checks that is not visited anymore
+				current = nextToVisit.get(0);
+				nextToVisit.remove(0);
+			}
 			List<Node> neighbors = searchSpace.generateSuccessors(current);
 			visited.add(current);
+			
 			for(Node neighbor : neighbors) {
 				
 				if(!visited.contains(neighbor)) {
@@ -233,13 +250,30 @@ public class Algorithms {
 				}
 				
 			}
-			nextToVisit.sort(Comparator.comparingInt());
+			//nextToVisit.sort(Comparator.comparingInt());
+			Collections.sort(nextToVisit,new Comparator<Node>(){
+				@Override
+				public int compare(Node fNode, Node sNode){											//put the smallest in front first
+					return fNode.f - sNode.f;													// put sNode fist: compare a big against a smaller will give a bigger value than 0
+					//leave fNode first: compare a small number against a bigger will give a smaller number than 0
+				}
+			}
+					);
+			
+			if(nextToVisit.get(0).equals(searchSpace.getGoalNode())){
+				System.out.println("WE MADE IT");
+				visited.add(nextToVisit.get(0));
+				for(int i = 0; i<visited.size(); i++){
+					System.out.println("Cost: "+visited.get(i).cost+" coordinate: ("+visited.get(i).coordenateX+", "+visited.get(i).coordenateY+") Value: "+visited.get(i).f);
+				}
+				
+				return;
+			}
 		
-			System.out.print(current);
+			//System.out.print(current);
 
 
 		}
-
 
 	}
 

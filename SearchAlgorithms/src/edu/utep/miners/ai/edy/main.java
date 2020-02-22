@@ -63,7 +63,7 @@ public class main {
 		//String file2 = "C:\\Users\\User\\Documents\\Java Programs\\SearchAlgorithms\\src\\"+file;
 		Graph g = ReadFile(file);          //read the file and 
 		Algorithms algorithm = new Algorithms(g);
-		//algorithm.displayGraph();
+		algorithm.displayGraph();
 		algorithm.successor();
 		//algorithm.print_successors(1,3);
 		//algorithm.BreadtFirst();

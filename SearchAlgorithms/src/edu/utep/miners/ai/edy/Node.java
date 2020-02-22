@@ -10,14 +10,16 @@ public class Node {
 
 	//for Iterative deepening search
 	int depth;														
-	int h;															//Distance between neightbors 
-	int g;															//Cost from begining to this node
+	int h;															//Expected distance between the node to the goal 
+	int g;															//Cost from beginning to this node
+	int f;															
 
 	/*Here we will contain the cost, the x-axis, y-axis (to make it easier in some cases) and will create the array of the neighbors*/
 	public Node(int c,int x, int y){
 		this.cost = c;
 		this.coordenateX = x;
 		this.coordenateY = y;
+		this.g = 0;													//the first distance between the node beginning to the start node is 0
 		successors = new Node[4];
 
 		if(this.cost == 0){											//Set the places that can or cannot go through

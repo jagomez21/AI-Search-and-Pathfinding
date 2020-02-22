@@ -31,16 +31,18 @@ public class Graph {
         //Up
         cheking = validNode(x - 1, y);
         if(cheking != null){
-        	cheking.h = (manhattanDist(cheking, getGoalNode()));
-        	cheking.g = (current.cost + cheking.cost);
-            successors.add(cheking);
+        	cheking.h = (manhattanDist(cheking, getGoalNode()));					//gets the expected distance from this node to goal
+        	cheking.g = (current.g + cheking.cost);									//check the cost of the current node + the cost of the node if going through this node
+            cheking.f = cheking.g + cheking.h;										//A*score
+        	successors.add(cheking);
         }
         
         //Down
         cheking = validNode(x + 1, y);
         if(cheking != null){
         	cheking.h = (manhattanDist(cheking, getGoalNode()));
-        	cheking.g = (current.cost + cheking.cost);
+        	cheking.g = (current.g + cheking.cost);
+        	cheking.f = cheking.g + cheking.h;										//A*score
             successors.add(cheking);
         }
         
@@ -48,7 +50,8 @@ public class Graph {
         cheking = validNode(x, y - 1);
         if(cheking != null){
         	cheking.h = (manhattanDist(cheking, getGoalNode()));
-        	cheking.g = (current.cost + cheking.cost);
+        	cheking.g = (current.g + cheking.cost);
+        	cheking.f = cheking.g + cheking.h;										//A*score
             successors.add(cheking);
         }
         
@@ -56,7 +59,8 @@ public class Graph {
         cheking = validNode(x, y + 1);
         if(cheking != null){
         	cheking.h = (manhattanDist(cheking, getGoalNode()));
-        	cheking.g = (current.cost + cheking.cost);
+        	cheking.g = (current.g + cheking.cost);
+        	cheking.f = cheking.g + cheking.h;										//A*score
             successors.add(cheking);
         }
         return successors;

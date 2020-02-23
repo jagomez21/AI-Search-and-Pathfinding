@@ -267,7 +267,8 @@ public class Algorithms {
 				for(int i = 0; i<visited.size(); i++){
 					System.out.println(i+" Cost: "+visited.get(i).cost+" coordinate: ("+visited.get(i).coordenateX+", "+visited.get(i).coordenateY+") Value: "+visited.get(i).f+" mahattan: "+visited.get(i).h+" path cost to the node: "+visited.get(i).g+" cost: "+visited.get(i).cost);
 				}
-				
+				System.out.println("Path");
+				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);
 				return;
 			}
 		

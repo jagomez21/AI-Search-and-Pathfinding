@@ -80,6 +80,7 @@ public class Graph {
 				cheking.h = (manhattanDist(cheking, getGoalNode()));					//gets the expected distance from this node to goal
 				cheking.g = (current.g + cheking.cost);									//check the cost of the current node + the cost of the node if going through this node
 				cheking.f = cheking.g + cheking.h;										//A*score
+				cheking.comingFrom = current;
 				successors.add(cheking);
 			}else{																		//it is already in the next to visit, to avoid the change in value, lets keep the smallest
 				int holdManhattan = (manhattanDist(cheking, getGoalNode()));
@@ -89,6 +90,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
+					cheking.comingFrom = current;
 					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
@@ -101,6 +103,7 @@ public class Graph {
 				cheking.h = (manhattanDist(cheking, getGoalNode()));					//gets the expected distance from this node to goal
 				cheking.g = (current.g + cheking.cost);									//check the cost of the current node + the cost of the node if going through this node
 				cheking.f = cheking.g + cheking.h;										//A*score
+				cheking.comingFrom = current;
 				successors.add(cheking);
 			}else{																		//it is already in the next to visit, to avoid the change in value, lets keep the smallest
 				int holdManhattan = (manhattanDist(cheking, getGoalNode()));
@@ -110,6 +113,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
+					cheking.comingFrom = current;
 					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
@@ -122,6 +126,7 @@ public class Graph {
 				cheking.h = (manhattanDist(cheking, getGoalNode()));					//gets the expected distance from this node to goal
 				cheking.g = (current.g + cheking.cost);									//check the cost of the current node + the cost of the node if going through this node
 				cheking.f = cheking.g + cheking.h;										//A*score
+				cheking.comingFrom = current;
 				successors.add(cheking);
 			}else{																		//it is already in the next to visit, to avoid the change in value, lets keep the smallest
 				int holdManhattan = (manhattanDist(cheking, getGoalNode()));
@@ -131,7 +136,8 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
-					//successors.add(cheking);
+					cheking.comingFrom = current;
+					//successors.add(cheking);       //already has the value in the list, only change the value
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
 		}
@@ -143,6 +149,7 @@ public class Graph {
 				cheking.h = (manhattanDist(cheking, getGoalNode()));					//gets the expected distance from this node to goal
 				cheking.g = (current.g + cheking.cost);									//check the cost of the current node + the cost of the node if going through this node
 				cheking.f = cheking.g + cheking.h;										//A*score
+				cheking.comingFrom = current;
 				successors.add(cheking);
 			}else{																		//it is already in the next to visit, to avoid the change in value, lets keep the smallest
 				int holdManhattan = (manhattanDist(cheking, getGoalNode()));
@@ -152,6 +159,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
+					cheking.comingFrom = current;
 					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}

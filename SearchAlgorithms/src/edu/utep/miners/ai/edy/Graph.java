@@ -89,7 +89,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
-					successors.add(cheking);
+					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
 		}
@@ -110,7 +110,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
-					successors.add(cheking);
+					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
 		}
@@ -131,7 +131,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
-					successors.add(cheking);
+					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
 		}
@@ -152,7 +152,7 @@ public class Graph {
 					cheking.h = holdManhattan;
 					cheking.g = holdTotalcostToNode;
 					cheking.f = holdAscore;
-					successors.add(cheking);
+					//successors.add(cheking);
 				}																		//if is greater than the current one, not bother to add it to next to visit
 			}
 		}

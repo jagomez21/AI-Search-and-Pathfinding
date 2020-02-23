@@ -64,12 +64,11 @@ public class main {
 		Graph g = ReadFile(file);          //read the file and 
 		Algorithms algorithm = new Algorithms(g);
 		algorithm.displayGraph();
-		//algorithm.successor();
+		algorithm.successor();
 		//algorithm.print_successors(1,3);
 		//algorithm.BreadtFirst();
 		
-		algorithm.BreadtFirst();
 		//algorithm.iterativeDeepSearch(g.getStartNode());
-		//algorithm.aStarSearch();
+		algorithm.aStarSearch();
 	}
 }

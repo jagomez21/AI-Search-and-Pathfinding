@@ -22,31 +22,7 @@ public class Graph {
 	public Node getGoalNode() {
 		return nodes[endx][endy];
 	}
-	
-	/*this method will generate the successors
-	 * It was removed because it was using extra work, so I used the one with the List
-	 * 
-	 * */
 
-	//public void successor(Node current){
-
-
-	//	if( ((i-1)>=0) && ((i-1)<searchSpace.nodes.length) && (searchSpace.nodes[i-1][j].impassable==false) ){					//below
-	//		searchSpace.nodes[i][j].setBelowSuccessor(searchSpace.nodes[i-1][j]);
-	//	}
-	//	if( ((j-1)>=0) && ((j-1)<searchSpace.nodes[i].length) && (searchSpace.nodes[i][j-1].impassable==false) ){					//left
-	//		searchSpace.nodes[i][j].setLeftSuccessor(searchSpace.nodes[i][j-1]);
-	//	}
-	//	if( ((j+1)>=0) && ((j+1)<searchSpace.nodes[i].length) && (searchSpace.nodes[i][j+1].impassable==false) ){					//right
-	//		searchSpace.nodes[i][j].setRightSuccessor(searchSpace.nodes[i][j+1]);
-	//	}
-	//	if( ((i+1)>=0) && ((i+1)<searchSpace.nodes.length) && (searchSpace.nodes[i+1][j].impassable==false) ){					//top
-	//		searchSpace.nodes[i][j].setTopSuccessor(searchSpace.nodes[i+1][j]);
-	//	}
-
-
-
-	//}
 	public List<Node> generateSuccessors(Node current) {
 		List<Node> successors = new ArrayList<>();
 		int x = current.coordenateX;

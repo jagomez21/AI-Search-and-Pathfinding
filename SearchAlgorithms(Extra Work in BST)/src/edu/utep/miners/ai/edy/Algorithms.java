@@ -44,7 +44,28 @@ public class Algorithms {
 		}
 	}
 
-	
+	/*this method will generate the successors*/
+
+	public void successor(){
+		for(int i=0; i<searchSpace.nodes.length;i++){
+			for(int j=0; j<searchSpace.nodes[i].length;j++){
+
+				if( ((i-1)>=0) && ((i-1)<searchSpace.nodes.length) && (searchSpace.nodes[i-1][j].impassable==false) ){					//below
+					searchSpace.nodes[i][j].setBelowSuccessor(searchSpace.nodes[i-1][j]);
+				}
+				if( ((j-1)>=0) && ((j-1)<searchSpace.nodes[i].length) && (searchSpace.nodes[i][j-1].impassable==false) ){					//left
+					searchSpace.nodes[i][j].setLeftSuccessor(searchSpace.nodes[i][j-1]);
+				}
+				if( ((j+1)>=0) && ((j+1)<searchSpace.nodes[i].length) && (searchSpace.nodes[i][j+1].impassable==false) ){					//right
+					searchSpace.nodes[i][j].setRightSuccessor(searchSpace.nodes[i][j+1]);
+				}
+				if( ((i+1)>=0) && ((i+1)<searchSpace.nodes.length) && (searchSpace.nodes[i+1][j].impassable==false) ){					//top
+					searchSpace.nodes[i][j].setTopSuccessor(searchSpace.nodes[i+1][j]);
+				}
+
+			}
+		}
+	}
 
 	/*prove that the successors are working correctly*/
 	public void print_successors(int i, int j){
@@ -113,21 +134,20 @@ public class Algorithms {
 
 			if(currentPos.equals(searchSpace.nodes[searchSpace.endx][searchSpace.endy])){					//Check if we arrived to the goal
 				System.out.println("The path was found" );
-				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);							//show the path to the beginning
+				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);
 				return;
 			}
-			//Node[] successorsOfCurrent = currentPos.successors;
-			List<Node> successorsOfCurrent = searchSpace.generateSuccessors(currentPos);
-			for(Node neighbor : successorsOfCurrent){
+			Node[] successorsOfCurrent = currentPos.successors;
+			for(int i=0; i< successorsOfCurrent.length;i++){
 				//if(successorsOfCurrent[i] == null){
 				//	System.out.println("Position: "+currentPos.cost+" fixing "+successorsOfCurrent[i]);
 				//}else{
 				//	System.out.println("Position: "+currentPos.cost+" fixing "+successorsOfCurrent[i].cost);
 				//}
-				if(!visitedPos.contains(neighbor) ){
-					nexttoVisit.add(neighbor);		//add the next node that will need to visit
-					visitedPos.add(neighbor);			//add the nodes that are in the nexttoVisit already so we dont repeat
-					neighbor.comingFrom = currentPos;	//set the nodes where they are coming from
+				if(!visitedPos.contains(successorsOfCurrent[i]) && successorsOfCurrent[i] !=null ){
+					nexttoVisit.add(successorsOfCurrent[i]);		//add the next node that will need to visit
+					visitedPos.add(successorsOfCurrent[i]);			//add the nodes that are in the nexttoVisit already so we dont repeat
+					successorsOfCurrent[i].comingFrom = currentPos;	//set the nodes where they are coming from
 
 				}
 			}
@@ -214,8 +234,8 @@ public class Algorithms {
 		while(!nextToVisit.isEmpty()){
 
 			Node current = nextToVisit.get(0);
-
-
+			
+			
 			//while(visited.contains(current)){									//This checks that is not visited anymore
 			//	current = nextToVisit.get(0);
 			//	nextToVisit.remove(0);
@@ -223,13 +243,13 @@ public class Algorithms {
 			List<Node> neighbors = searchSpace.generateSuccessorsForAstar(current, nextToVisit, visited);
 			nextToVisit.remove(0);
 			visited.add(current);
-
+			
 			for(Node neighbor : neighbors) {									//checks in generate successors
-
+				
 				if(!visited.contains(neighbor) ) {
 					nextToVisit.add(neighbor);
 				}
-
+				
 			}
 			//nextToVisit.sort(Comparator.comparingInt());
 			Collections.sort(nextToVisit,new Comparator<Node>(){
@@ -240,7 +260,7 @@ public class Algorithms {
 				}
 			}
 					);
-
+			
 			if(nextToVisit.get(0).equals(searchSpace.getGoalNode())){
 				System.out.println("WE MADE IT");
 				visited.add(nextToVisit.get(0));
@@ -251,7 +271,7 @@ public class Algorithms {
 				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);
 				return;
 			}
-
+		
 			//System.out.print(current);
 
 

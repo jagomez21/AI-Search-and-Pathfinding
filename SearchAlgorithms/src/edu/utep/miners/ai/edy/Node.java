@@ -57,6 +57,7 @@ public class Node {
 
 
 
+
 	public boolean equals(Node node) {
 		return node.coordenateX == coordenateX && node.coordenateY == coordenateY && node.cost == cost;
 	}

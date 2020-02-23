@@ -234,18 +234,19 @@ public class Algorithms {
 		while(!nextToVisit.isEmpty()){
 
 			Node current = nextToVisit.get(0);
-			nextToVisit.remove(0);
 			
-			while(visited.contains(current)){									//This checks that is not visited anymore
-				current = nextToVisit.get(0);
-				nextToVisit.remove(0);
-			}
-			List<Node> neighbors = searchSpace.generateSuccessors(current);
+			
+			//while(visited.contains(current)){									//This checks that is not visited anymore
+			//	current = nextToVisit.get(0);
+			//	nextToVisit.remove(0);
+			//}
+			List<Node> neighbors = searchSpace.generateSuccessorsForAstar(current, nextToVisit, visited);
+			nextToVisit.remove(0);
 			visited.add(current);
 			
-			for(Node neighbor : neighbors) {
+			for(Node neighbor : neighbors) {									//checks in generate successors
 				
-				if(!visited.contains(neighbor)) {
+				if(!visited.contains(neighbor) ) {
 					nextToVisit.add(neighbor);
 				}
 				
@@ -264,7 +265,7 @@ public class Algorithms {
 				System.out.println("WE MADE IT");
 				visited.add(nextToVisit.get(0));
 				for(int i = 0; i<visited.size(); i++){
-					System.out.println("Cost: "+visited.get(i).cost+" coordinate: ("+visited.get(i).coordenateX+", "+visited.get(i).coordenateY+") Value: "+visited.get(i).f);
+					System.out.println(i+" Cost: "+visited.get(i).cost+" coordinate: ("+visited.get(i).coordenateX+", "+visited.get(i).coordenateY+") Value: "+visited.get(i).f+" mahattan: "+visited.get(i).h+" path cost to the node: "+visited.get(i).g+" cost: "+visited.get(i).cost);
 				}
 				
 				return;

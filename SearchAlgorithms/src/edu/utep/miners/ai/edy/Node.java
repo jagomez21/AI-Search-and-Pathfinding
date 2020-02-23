@@ -1,68 +1,98 @@
 package edu.utep.miners.ai.edy;
 
+/**
+ * @author Eduardo Lara and Jesus Gomez
+ *
+ * The Node class stores the properties
+ * of each node, like location and estimates.
+ *
+ * Class: CS 4320/5314
+ * Instructor: Christopher Kiekintveld
+ * Assignment: HW3: Search and Pathfinding
+ * Date of last modification: 02/23/2020
+ **/
+
 public class Node {
-	int cost;														//The cost of the node
-	int coordenateX;												//easier axes to the coordenate X of this node
-	int coordenateY;												//easier axes to the coordenate Y of this node
-	boolean impassable;												//check if this this node is accessible
-	Node[] successors;										    	//keep track of the successors [below, left, right, top]
-	Node comingFrom;												//keep track of where it comes from
+	private int cost, x, y, depth, h, g, f;																					
+	private Node comingFrom;																											
 
-	//for Iterative deepening search
-	int depth;														
-	int h;															//Expected distance between the node to the goal 
-	int g;															//Cost from beginning to this node
-	int f;															
-
-	/*Here we will contain the cost, the x-axis, y-axis (to make it easier in some cases) and will create the array of the neighbors*/
-	public Node(int c,int x, int y){
-		this.cost = c;
-		this.coordenateX = x;
-		this.coordenateY = y;
-		this.g = 0;													//the first distance between the node beginning to the start node is 0
-		successors = new Node[4];
-
-		if(this.cost == 0){											//Set the places that can or cannot go through
-			this.impassable = true;
-		}else{
-			this.impassable = false;
-		}
+	/** Constructor */
+	public Node(int cost, int x, int y){
+		this.cost = cost;
+		this.x = x;
+		this.y = y;
 	}
 
-	//From here to bottom was used for BreadtFirst
-	/* This metod will set the cost and impassable (check if it has 0)*/
-	public void setCostImpassable(int c){
-		this.cost = c;
-
-		if(this.cost == 0){											//Set the places that can or cannot go through
-			this.impassable = true;
-		}else{
-			this.impassable = false;
-		}
-	}
-
-	/*This four methods are used to keep track of the successors*/
-	public void setBelowSuccessor(Node b){
-		this.successors[0] = b;
-	}
-	public void setLeftSuccessor(Node l){								//left
-		this.successors[1] = l;
-	}
-	public void setRightSuccessor(Node r){								//right
-		this.successors[2] = r;
-	}
-	public void setTopSuccessor(Node t){								//top
-		this.successors[3] = t;
-	}
-
-
-
-
+	/** 
+	 * Checks if given node is equal to this by comparing its values. 
+	 * 
+	 * @param given node
+	 * @return true if given node and this one are the same.
+	 * */
 	public boolean equals(Node node) {
-		return node.coordenateX == coordenateX && node.coordenateY == coordenateY && node.cost == cost;
+		return node.getX() == x && node.getY() == y && node.getCost() == cost;
 	}
 
+	/** Returns true if node is impassable, which is when cost == 0. */
 	public boolean isImpassable() {
 		return cost == 0;
 	} 
+	
+	/** Getters */
+	public int getCost() {
+		return cost;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public int getH() {
+		return h;
+	}
+	
+	public int getG() {
+		return g;
+	}
+	
+	public int getDepth() {
+		return depth;
+	}
+	
+	public int getF() {
+		return f;
+	}
+	
+	public Node getComingFrom() {
+		return comingFrom;
+	}
+	
+	/** Setters */
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+	
+	public void setH(int h) {
+		this.h = h;
+	}
+	
+	public void setG(int g) {
+		this.g = g;
+	}
+	
+	public void setF(int f) {
+		this.f = f;
+	}
+	
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+	
+	public void setComingFrom(Node comingFrom) {
+		this.comingFrom = comingFrom;
+	}
 }

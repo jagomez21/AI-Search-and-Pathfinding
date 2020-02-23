@@ -8,139 +8,129 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
+
+/**
+ * @author Eduardo Lara and Jesus Gomez
+ *
+ * The Algorithms class contains all 3
+ * algorithms BFS, IDS and A*search along
+ * with helper methods.
+ *
+ * Class: CS 4320/5314
+ * Instructor: Christopher Kiekintveld
+ * Assignment: HW3: Search and Pathfinding
+ * Date of last modification: 02/23/2020
+ **/
+
 public class Algorithms {
 
+	/** Variables */
 	private Graph searchSpace;
 	private boolean stopCurrentAlg = false;
 
-	//Constructor
+	/** Constructor */
 	public Algorithms (Graph graph) {
 		searchSpace = graph;
 	}
 
-	public void displayGraph(){												//This will display the graph/cost of all the nodes. the empty spaces are the places where you can not go through
-		System.out.println("Start Coordinates ("+searchSpace.startx+","+searchSpace.starty+")");
-		System.out.println("End Coordinates ("+searchSpace.endx+","+searchSpace.endy+")");
+	/** Displays the graph along with the cost of all the nodes. Used for debug purposes. */
+	public void displayGraph(){
+		System.out.println("Start Coordinates (" + searchSpace.getStartX() + "," + searchSpace.getStartY() + ")");
+		System.out.println("End Coordinates (" + searchSpace.getEndX() + "," + searchSpace.getEndY() + ")");
 		System.out.println("Traverse Cost:");
-		for(int i=0; i< searchSpace.nodes.length;i++){
-			for(int j=0; j<searchSpace.nodes[i].length; j++){
-				if(!searchSpace.nodes[i][j].impassable){
-					System.out.print(searchSpace.nodes[i][j].cost+" ");
-				}else{
+
+		for(int i = 0; i < searchSpace.getGraph().length; i++) {
+			for(int j = 0; j < searchSpace.getGraph()[i].length; j++) {
+				if(!searchSpace.getGraph()[i][j].isImpassable()) {
+					System.out.print(searchSpace.getGraph()[i][j].getCost() + " ");
+				} else {
 					System.out.print("  ");
 				}
 			}
 			System.out.println();
 		}
-		for(int i=0; i< searchSpace.nodes.length;i++){
-			for(int j=0; j<searchSpace.nodes[i].length; j++){
-				if(!searchSpace.nodes[i][j].impassable){
-					System.out.print(" ("+searchSpace.nodes[i][j].coordenateX+", "+searchSpace.nodes[i][j].coordenateY+") ");
-				}else{
-					System.out.print(" ( ,  ) ");
+
+		for(int i = 0; i < searchSpace.getGraph().length; i++) {
+			for(int j = 0; j < searchSpace.getGraph()[i].length; j++) {
+				if(!searchSpace.getGraph()[i][j].isImpassable()) {
+					System.out.print(" ("+searchSpace.getGraph()[i][j].getX() + ", " + 
+							searchSpace.getGraph()[i][j].getY() + ") ");
+				} else {
+					System.out.print(" ( , ) ");
 				}
 			}
 			System.out.println();
 		}
 	}
 
-	
-
-	/*prove that the successors are working correctly*/
-	public void print_successors(int i, int j){
-		System.out.println("successors:");
-		System.out.print("current:"+searchSpace.nodes[i][j].cost);
-		if(searchSpace.nodes[i][j].successors[3] != null){															//top
-			System.out.print(" top: "+searchSpace.nodes[i][j].successors[3].cost+" ");
-		}else{
-			System.out.print(" top: "+searchSpace.nodes[i][j].successors[3]+" ");
-		}
-		if(searchSpace.nodes[i][j].successors[0] != null){															//below
-			System.out.print(" below: "+searchSpace.nodes[i][j].successors[0].cost+" ");
-		}else{
-			System.out.print(" below: "+searchSpace.nodes[i][j].successors[0]+" ");
-		}
-		if(searchSpace.nodes[i][j].successors[1] != null){															//left
-			System.out.print(" left: "+searchSpace.nodes[i][j].successors[1].cost+" ");
-		}else{
-			System.out.print(" left: "+searchSpace.nodes[i][j].successors[1]+" ");
-		}
-		if(searchSpace.nodes[i][j].successors[2] != null){															//right
-			System.out.print(" right: "+searchSpace.nodes[i][j].successors[2].cost+" ");
-		}else{
-			System.out.print(" right: "+searchSpace.nodes[i][j].successors[2]+" ");
-		}
-		System.out.println();
-	}
-
+	/** Prints reversed path of given node. */
 	public void findPath(Node graph){
+		int totalCost = 0;
 		System.out.print("Reverse path: ");
-		while(graph.comingFrom !=null){
-			System.out.println("X: ("+graph.coordenateX+", "+graph.coordenateY+") Cost: "+graph.cost);
-			graph = graph.comingFrom;
+		while(graph.getComingFrom() !=null){
+			System.out.println("X: (" + graph.getX() + ", " + graph.getY() + ") Cost: " + graph.getCost());
+			graph = graph.getComingFrom();
+			totalCost += graph.getCost();
 		}
-		System.out.println("X: ("+graph.coordenateX+", "+graph.coordenateY+") Cost: "+graph.cost);
-
+		System.out.println("X: (" + graph.getX() + ", " + graph.getY() + ") Cost: " + graph.getCost());
+		totalCost += graph.getCost();
+		System.out.println("Total Cost: " + totalCost);
 	}
 
-	/* breadth-first search algorithm*/
-	public void BreadtFirst(){
+	/** 
+	 * Will perform Breadth First search algorithm into the 
+	 * search space and prints the output of it. 
+	 **/
+	public void breadthFirst() {
+		System.out.println("\nBreadth-first search: \n");
+		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
+
 		PriorityQueue<Node> nexttoVisit =new PriorityQueue<>(new Comparator<Node>(){
 			@Override
-			public int compare(Node fNode, Node sNode){											//put the smallest in front first
-				return fNode.cost - sNode.cost;													// put sNode fist: compare a big against a smaller will give a bigger value than 0
-				//leave fNode first: compare a small number against a bigger will give a smaller number than 0
+			public int compare(Node fNode, Node sNode){	    //put the smallest in front first
+				return fNode.getCost() - sNode.getCost();	// put sNode fist: compare a big against a smaller will give a bigger value than 0
 			}
 		});
 		int totalCost = 0;
-
-		//for(int i=0; i<searchSpace.nodes[1][3].successors.length; i++){										//check if this queue works
-		//	q.add(searchSpace.nodes[1][3].successors[i]);
-		//}
-		//while(!q.isEmpty()){
-		//	System.out.println(q.remove().cost);
-		//}
 		List<Node> visitedPos = new ArrayList<>();
+		nexttoVisit.add(searchSpace.getStartNode());
 
-		nexttoVisit.add(searchSpace.nodes[searchSpace.startx][searchSpace.starty]);							//start
-
-		while(!nexttoVisit.isEmpty()){
-
-			//remove the node to continue with the node
-			Node currentPos = nexttoVisit.remove();
-
-			visitedPos.add(currentPos);								//now the current position will count as visited
-
-			if(currentPos.equals(searchSpace.nodes[searchSpace.endx][searchSpace.endy])){					//Check if we arrived to the goal
-				System.out.println("The path was found" );
-				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);							//show the path to the beginning
+		while(!nexttoVisit.isEmpty()) {
+			if(System.currentTimeMillis() > endTime) {
+				System.out.println("3 minutes exceeded!");
 				return;
 			}
-			//Node[] successorsOfCurrent = currentPos.successors;
-			List<Node> successorsOfCurrent = searchSpace.generateSuccessors(currentPos);
-			for(Node neighbor : successorsOfCurrent){
-				//if(successorsOfCurrent[i] == null){
-				//	System.out.println("Position: "+currentPos.cost+" fixing "+successorsOfCurrent[i]);
-				//}else{
-				//	System.out.println("Position: "+currentPos.cost+" fixing "+successorsOfCurrent[i].cost);
-				//}
-				if(!visitedPos.contains(neighbor) ){
-					nexttoVisit.add(neighbor);		//add the next node that will need to visit
-					visitedPos.add(neighbor);			//add the nodes that are in the nexttoVisit already so we dont repeat
-					neighbor.comingFrom = currentPos;	//set the nodes where they are coming from
 
-				}
+			Node currentPos = nexttoVisit.remove();               //remove the node to continue with the node
+
+			visitedPos.add(currentPos);						      //now the current position will count as visited
+
+			if(currentPos.equals(searchSpace.getGoalNode())) {	  //Check if we arrived to the goal
+				System.out.println("\nGoal Found: " + "(" + currentPos.getX() + "," + currentPos.getY() + ")");
+				findPath(searchSpace.getGoalNode());			  //show the path to the beginning
+				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
+				System.out.println("Nodes in Memory: " + visitedPos.size());
+				return;
 			}
 
-
+			List<Node> successorsOfCurrent = searchSpace.generateSuccessors(currentPos);
+			for(Node neighbor : successorsOfCurrent){
+				if(!visitedPos.contains(neighbor) ){
+					nexttoVisit.add(neighbor);		    //add the next node that will need to visit
+					visitedPos.add(neighbor);			//add the nodes that are in the nexttoVisit already so we dont repeat
+					neighbor.setComingFrom(currentPos);	//set the nodes where they are coming from
+				}
+			}
 		}
-
 	}
 
-
-	public void iterativeDeepSearch(Node start) {
-		System.out.println("Iterative Deep Search: \n");
-		System.out.println("costo: " + start.cost);
+	/** 
+	 * Will perform iterative deepening search algorithm into the 
+	 * search space and prints the output of it. 
+	 **/
+	public void iterativeDeepSearch() {
+		Node start = searchSpace.getStartNode();
+		System.out.println("\nIterative Deep Search: \n");
 
 		int depth = 0, nodeNum = 0;
 		do {
@@ -156,7 +146,8 @@ public class Algorithms {
 		stopCurrentAlg = false;
 	}
 
-	public int depthSearch(Node problem, int limit) {
+	/** Performs algorithm and prints nodes in each depth. **/
+	private int depthSearch(Node problem, int limit) {
 		int nodesExpanded = 1, totalCost = 0;
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
 
@@ -164,7 +155,7 @@ public class Algorithms {
 
 		Stack<Node> fringe = new Stack<>();
 		Set<Node> visitedNodes = new HashSet<>();
-		problem.depth = 0;
+		problem.setDepth(0);
 		fringe.push(problem);
 
 		while(!fringe.isEmpty()){
@@ -173,25 +164,25 @@ public class Algorithms {
 			}
 
 			Node current = fringe.pop();
-			totalCost += current.cost;
-			nodes += "(" + current.coordenateX + "," + current.coordenateY + ") ";
+			totalCost += current.getCost();
+			nodes += "(" + current.getX() + "," + current.getY() + ") ";
 
 			if(searchSpace.getGoalNode().equals(current)){
 				System.out.println(nodes);
 				stopCurrentAlg = true;
-				System.out.println("\nGoal Found: " + "(" + current.coordenateX + "," + current.coordenateY + ")");
+				System.out.println("\nGoal Found: " + "(" + current.getX() + "," + current.getY() + ")");
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
 				System.out.println("Total Cost: " + totalCost);
 				System.out.println("Nodes in Memory: " + visitedNodes.size());
 				return nodesExpanded;
 			}
 
-			if(current.depth >= limit){
+			if(current.getDepth() >= limit){
 				break;
 			}
 
 			for(Node successor : searchSpace.generateSuccessors(current)) {
-				successor.depth = (current.depth + 1);
+				successor.setDepth(current.getDepth() + 1);
 				if(!visitedNodes.contains(successor)) {
 					nodesExpanded++;
 					visitedNodes.add(successor);
@@ -203,7 +194,14 @@ public class Algorithms {
 		return nodesExpanded;
 	}
 
-	public void aStarSearch(){
+	/** 
+	 * Will perform A * Search algorithm into the 
+	 * search space and prints the output of it. 
+	 **/
+	public void aStarSearch() {
+		System.out.println("\nA* Search: \n");
+		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
+
 		List<Node> visited = new ArrayList<Node>();
 		List<Node> nextToVisit = new ArrayList<Node>();
 
@@ -211,52 +209,45 @@ public class Algorithms {
 
 		nextToVisit.add(start);
 
-		while(!nextToVisit.isEmpty()){
+		while(!nextToVisit.isEmpty()) {
+			if(System.currentTimeMillis() > endTime) {
+				System.out.println("3 minutes exceeded!");
+				return;
+			}
 
 			Node current = nextToVisit.get(0);
-
-
-			//while(visited.contains(current)){									//This checks that is not visited anymore
-			//	current = nextToVisit.get(0);
-			//	nextToVisit.remove(0);
-			//}
 			List<Node> neighbors = searchSpace.generateSuccessorsForAstar(current, nextToVisit, visited);
 			nextToVisit.remove(0);
 			visited.add(current);
 
-			for(Node neighbor : neighbors) {									//checks in generate successors
-
-				if(!visited.contains(neighbor) ) {
+			for(Node neighbor : neighbors) {	//checks in generate successors
+				if(!visited.contains(neighbor)) {
 					nextToVisit.add(neighbor);
 				}
-
 			}
-			//nextToVisit.sort(Comparator.comparingInt());
+
 			Collections.sort(nextToVisit,new Comparator<Node>(){
 				@Override
-				public int compare(Node fNode, Node sNode){											//put the smallest in front first
-					return fNode.f - sNode.f;													// put sNode fist: compare a big against a smaller will give a bigger value than 0
-					//leave fNode first: compare a small number against a bigger will give a smaller number than 0
+				public int compare(Node fNode, Node sNode) { //put the smallest in front first
+					return fNode.getF() - sNode.getF();		 // put sNode fist: compare a big against a smaller will give a bigger value than 0
 				}
-			}
-					);
+			});
 
 			if(nextToVisit.get(0).equals(searchSpace.getGoalNode())){
-				System.out.println("WE MADE IT");
+				System.out.println("\nGoal Found: " + "(" + nextToVisit.get(0).getX() + "," + nextToVisit.get(0).getY() + ")");
 				visited.add(nextToVisit.get(0));
-				for(int i = 0; i<visited.size(); i++){
-					System.out.println(i+" Cost: "+visited.get(i).cost+" coordinate: ("+visited.get(i).coordenateX+", "+visited.get(i).coordenateY+") Value: "+visited.get(i).f+" mahattan: "+visited.get(i).h+" path cost to the node: "+visited.get(i).g+" cost: "+visited.get(i).cost);
+				for(Node node : visited) {
+					System.out.println(" Cost: " + node.getCost() + 
+							" coordinate: (" + node.getX() + ", " + node.getY() + 
+							") Value: " + node.getF() + " mahattan: " + node.getH() + 
+							" path cost to the node: " + node.getG() + " cost: " + node.getCost());
 				}
 				System.out.println("Path");
-				findPath(searchSpace.nodes[searchSpace.endx][searchSpace.endy]);
+				findPath(searchSpace.getGoalNode());
+				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
+				System.out.println("Nodes in Memory: " + visited.size());
 				return;
 			}
-
-			//System.out.print(current);
-
-
 		}
-
 	}
-
 }

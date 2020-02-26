@@ -4,17 +4,6 @@
 ## Description:
 This program performs 3 different algorithms which are, breadth-first search, iterative deepening search and a* search on a search space that is given in a txt file.
 
-txt file format:
-
-5 7            <- dimensions
-1 2            <- start node
-4 3            <- goal node
-2 4 2 1 4 5 2  <- map
-0 1 2 3 5 3 1
-2 0 4 4 1 2 4
-2 5 5 3 2 0 1
-4 3 3 2 1 0 1
-
 ## Instructions:
 In order to run the executable file, use the following command:
 

@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
  * Date of last modification: 02/23/2020
  **/
 
-public class Main {
+public class main {
 
 	/** 
 	 * Reads a txt file and generates a graph/search space.
@@ -62,14 +62,15 @@ public class Main {
 	}
 
 	public static void main(String[] args) throws IOException {
-		/* Hardcoded, used for testing purposes.
-		 * 
-		 * Graph graph = ReadFile("map1.txt");
-		 * Algorithms algorithm = new Algorithms(graph);
-		 * algorithm.breadthFirst();
-		 * algorithm.iterativeDeepSearch();
-		 * algorithm.aStarSearch();
-		 */
+		// Hardcoded, used for testing purposes.
+		  
+		  Graph graph = ReadFile("map1.txt");
+		 Algorithms algorithm = new Algorithms(graph);
+		// algorithm.displayGraph();
+		  //algorithm.breadthFirst();
+		 //algorithm.iterativeDeepSearch();
+		 algorithm.aStarSearch();
+		 
 
 		/*if(args.length > 0 && args.length < 3) {
 			if(args.length == 1) {
@@ -82,7 +83,7 @@ public class Main {
 					algorithm.breadthFirst();
 				} else if(args[1].equalsIgnoreCase("ids")) {
 					algorithm.iterativeDeepSearch();
-				} else if(args[1].equalsIgnoreCase("a*")) {
+				} else if(args[1].equalsIgnoreCase("as")) {
 					algorithm.aStarSearch();
 				} else {
 					System.out.println("Available Algorithms: BFS, IDS  A*");

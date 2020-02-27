@@ -45,11 +45,40 @@ public class Graph {
 		List<Node> neighbors = Arrays.asList(validNode(x - 1, y), validNode(x + 1, y), validNode(x, y - 1), validNode(x, y + 1)); // Up, Down, Left, Right
 
 		for(Node checking : neighbors) {
-			if(checking != null) {
+			if(checking != null && !checking.equals(current)) {
 				checking.setH(manhattanDist(checking, getGoalNode())); //gets the expected distance from this node to goal
 				checking.setG(current.getCost() + checking.getCost());    //check the cost of the current node + the cost of the node if going through this node
 				checking.setF(checking.getG() + checking.getH());
 				successors.add(checking);
+			}
+		}
+		return successors;
+	}
+
+	/** 
+	 * Checks all neighbors of given node and returns the list of 
+	 * all existent and passable neighbors. Also computes h, g and 
+	 * f for all neighbors. 
+	 *
+	 * @param current node being checked in order to generate successors.
+	 * @param visited list of visited nodes.
+	 * 
+	 * @return list of successors from given node.
+	 */
+	public List<Node> generateSuccessorsIDS(Node current, List<Node> visited) {
+		List<Node> successors = new ArrayList<>();
+		int x = current.getX();
+		int y = current.getY();    
+
+		List<Node> neighbors = Arrays.asList(validNode(x - 1, y), validNode(x + 1, y), validNode(x, y - 1), validNode(x, y + 1)); // Up, Down, Left, Right
+
+		for(Node checking : neighbors) {
+			if(checking != null && (!visited.contains(checking))) {
+				checking.setH(manhattanDist(checking, getGoalNode())); //gets the expected distance from this node to goal
+				checking.setG(current.getCost() + checking.getCost());    //check the cost of the current node + the cost of the node if going through this node
+				checking.setF(checking.getG() + checking.getH());
+				successors.add(checking);
+				checking.setComingFrom(current);
 			}
 		}
 		return successors;
@@ -124,7 +153,7 @@ public class Graph {
 	 * @return manhattan-distance
 	 * */
 	public int manhattanDist(Node nodeA, Node nodeB){
-		return((Math.abs(nodeA.getX() - nodeB.getY())) + (Math.abs(nodeA.getY() - nodeB.getY())));
+		return((Math.abs(nodeA.getX() - nodeB.getX())) + (Math.abs(nodeA.getY() - nodeB.getY())));
 	}
 
 	/** Getters */

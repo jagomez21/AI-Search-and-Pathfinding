@@ -2,11 +2,8 @@ package edu.utep.miners.ai.edy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
-import java.util.Stack;
 
 
 /**
@@ -62,19 +59,30 @@ public class Algorithms {
 			System.out.println();
 		}
 	}
-
-	/** Prints reversed path of given node. */
-	public void findPath(Node graph){
+	
+	/* Total cost for algorithms */
+	public void totalCost(Node graph){
 		int totalCost = 0;
-		System.out.print("Reverse path: ");
 		while(graph.getComingFrom() !=null){
-			System.out.println("X: (" + graph.getX() + ", " + graph.getY() + ") Cost: " + graph.getCost());
 			graph = graph.getComingFrom();
 			totalCost += graph.getCost();
+			
 		}
-		System.out.println("X: (" + graph.getX() + ", " + graph.getY() + ") Cost: " + graph.getCost());
 		totalCost += graph.getCost();
-		System.out.println("Total Cost: " + totalCost);
+		System.out.println("Path Cost: " + totalCost);
+		
+	}
+	
+	
+	/** Prints reversed path of given node. */
+	public void findPath(Node graph){
+		if(graph != null){
+			findPath(graph.getComingFrom());
+			System.out.print(" (" + graph.getX() + ", " + graph.getY() + ") ");
+			
+		}
+		
+		
 	}
 
 	/** 
@@ -84,6 +92,8 @@ public class Algorithms {
 	public void breadthFirst() {
 		System.out.println("\nBreadth-first search: \n");
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
+		
+		int expandedNodes = 0;															//number of nodes Expanded
 
 		PriorityQueue<Node> nexttoVisit =new PriorityQueue<>(new Comparator<Node>(){
 			@Override
@@ -107,9 +117,17 @@ public class Algorithms {
 
 			if(currentPos.equals(searchSpace.getGoalNode())) {	  //Check if we arrived to the goal
 				System.out.println("\nGoal Found: " + "(" + currentPos.getX() + "," + currentPos.getY() + ")");
-				findPath(searchSpace.getGoalNode());			  //show the path to the beginning
+				
+				System.out.println();
+				totalCost(searchSpace.getGoalNode());
+				System.out.println("Nodes Expanded: "+(visitedPos.size()-1));
+				System.out.println("Nodes in Mempory, in Queue: "+nexttoVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				System.out.println("Nodes in Memory: " + visitedPos.size());
+				//System.out.println("Nodes in Memory: " + visited.size());
+				System.out.print("Path:");
+				findPath(searchSpace.getGoalNode());
+				System.out.println();
+				
 				return;
 			}
 
@@ -122,6 +140,15 @@ public class Algorithms {
 				}
 			}
 		}
+		if(nexttoVisit.isEmpty()){
+			System.out.println("Path Cost: "+(-1));
+			System.out.println("Nodes Expanded: "+visitedPos.size());
+			System.out.println("Nodes in memory, in Queue: "+nexttoVisit.size());
+			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
+			System.out.println("Path Sequence: Null");
+			
+		}
+		
 	}
 
 	/** 
@@ -141,56 +168,81 @@ public class Algorithms {
 				return;
 			}
 		} while (!stopCurrentAlg);
-		System.out.println("Depth: " + depth);
-		System.out.println("Expanded Nodes: " + nodeNum);
+		System.out.println("Depth: " + searchSpace.getGoalNode().getDepth());
 		stopCurrentAlg = false;
 	}
 
-	/** Performs algorithm and prints nodes in each depth. **/
+	/** Performs algorithm and prints nodes in each depth. 
+	 * 
+	 * @param problem node being search.
+	 * @param limit / depth
+	 * 
+	 * @return num of nodes expanded.
+	 * **/
 	private int depthSearch(Node problem, int limit) {
-		int nodesExpanded = 1, totalCost = 0;
+		int nodesExpanded = 1;
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
 
 		String nodes = "";
+		
+		PriorityQueue<Node> nextToVisit = new PriorityQueue<>(new Comparator<Node>() {
+			@Override
+			public int compare(Node fNode, Node sNode){	    //put the smallest in front first
+				return fNode.getDepth() - sNode.getDepth();	// put sNode fist: compare a big against a smaller will give a bigger value than 0
+			}
+		});
 
-		Stack<Node> fringe = new Stack<>();
-		Set<Node> visitedNodes = new HashSet<>();
-		problem.setDepth(0);
-		fringe.push(problem);
+		List<Node> visitedNodes = new ArrayList<>();
+		if(problem.equals(searchSpace.getStartNode()))
+			problem.setDepth(0);
+		nextToVisit.add(problem);
 
-		while(!fringe.isEmpty()){
+		while(!nextToVisit.isEmpty()) {
 			if(System.currentTimeMillis() > endTime){
 				return -1;
 			}
 
-			Node current = fringe.pop();
-			totalCost += current.getCost();
+			Node current = nextToVisit.remove();
+			visitedNodes.add(current);
+			
 			nodes += "(" + current.getX() + "," + current.getY() + ") ";
 
-			if(searchSpace.getGoalNode().equals(current)){
-				System.out.println(nodes);
+			if(searchSpace.getGoalNode().equals(current)) {
+				//System.out.println(nodes);
 				stopCurrentAlg = true;
 				System.out.println("\nGoal Found: " + "(" + current.getX() + "," + current.getY() + ")");
+				
+				System.out.println();
+				totalCost(searchSpace.getGoalNode());
+				System.out.println("Nodes Expanded: "+(visitedNodes.size()-1));
+				System.out.println("Nodes in memory, in Queue: "+nextToVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				System.out.println("Total Cost: " + totalCost);
-				System.out.println("Nodes in Memory: " + visitedNodes.size());
+				//System.out.println("Nodes in Memory: " + visited.size());
+				System.out.print("Path:");
+				findPath(searchSpace.getGoalNode());
+				System.out.println();
+				
 				return nodesExpanded;
 			}
-
-			if(current.getDepth() >= limit){
-				break;
-			}
-
-			for(Node successor : searchSpace.generateSuccessors(current)) {
-				successor.setDepth(current.getDepth() + 1);
+			
+			for(Node successor : searchSpace.generateSuccessorsIDS(current, visitedNodes)) {
 				if(!visitedNodes.contains(successor)) {
+					successor.setDepth(current.getDepth() + 1);
 					nodesExpanded++;
 					visitedNodes.add(successor);
-					fringe.push(successor);
+					nextToVisit.add(successor);
 				}
 			}
 		}
-		System.out.println(nodes);
+		if(nextToVisit.isEmpty()){
+			System.out.println("Path Cost: "+(-1));
+			System.out.println("Nodes Expanded: "+visitedNodes.size());
+			System.out.println("Not visited yet but in Queue: "+nextToVisit.size());
+			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
+			System.out.println("Path Sequence: Null");
+			
+		}
+		System.out.println(nodes + "Depth " + limit);
 		return nodesExpanded;
 	}
 
@@ -242,12 +294,26 @@ public class Algorithms {
 							") Value: " + node.getF() + " mahattan: " + node.getH() + 
 							" path cost to the node: " + node.getG() + " cost: " + node.getCost());
 				}
-				System.out.println("Path");
-				findPath(searchSpace.getGoalNode());
+				//visited.add(nextToVisit.get(0));
+				System.out.println();
+				System.out.println("Path Cost: "+searchSpace.getGoalNode().getG());
+				System.out.println("Nodes Expanded: "+(visited.size()-1));
+				System.out.println("Nodes in Memory, in Queue: "+nextToVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				System.out.println("Nodes in Memory: " + visited.size());
+				//System.out.println("Nodes in Memory: " + visited.size());
+				System.out.print("Path:");
+				findPath(searchSpace.getGoalNode());
+				System.out.println();
 				return;
 			}
+		}
+		if(nextToVisit.isEmpty()){
+			System.out.println("Path Cost: "+(-1));
+			System.out.println("Nodes Expanded: "+visited.size());
+			System.out.println("Nodes in memory, in Queue: "+nextToVisit.size());
+			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
+			System.out.println("Path Sequence: Null");
+			
 		}
 	}
 }

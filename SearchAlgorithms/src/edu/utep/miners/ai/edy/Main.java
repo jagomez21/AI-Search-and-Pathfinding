@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
  * Date of last modification: 02/23/2020
  **/
 
-public class main {
+public class Main {
 
 	/** 
 	 * Reads a txt file and generates a graph/search space.
@@ -61,37 +61,40 @@ public class main {
 		return execGraph;
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException{
 		// Hardcoded, used for testing purposes.
-		  
-		  Graph graph = ReadFile("map1.txt");
-		 Algorithms algorithm = new Algorithms(graph);
-		// algorithm.displayGraph();
-		  //algorithm.breadthFirst();
-		 //algorithm.iterativeDeepSearch();
-		 algorithm.aStarSearch();
-		 
+		//Graph graph = ReadFile("map1.txt");
+		//Algorithms algorithm = new Algorithms(graph);
+		//algorithm.displayGraph();
+		//algorithm.breadthFirst();
+		//algorithm.iterativeDeepSearch();
+		//algorithm.aStarSearch();
 
-		/*if(args.length > 0 && args.length < 3) {
-			if(args.length == 1) {
-				System.out.println("Please specify the desire algorithm.");
-				System.out.println("Available Algorithms: BFS, IDS  A*");
-			} else if(args.length == 2) {
-				Graph graph = ReadFile("map1.txt");
-				Algorithms algorithm = new Algorithms(graph);
-				if(args[1].equalsIgnoreCase("bfs")) {
-					algorithm.breadthFirst();
-				} else if(args[1].equalsIgnoreCase("ids")) {
-					algorithm.iterativeDeepSearch();
-				} else if(args[1].equalsIgnoreCase("as")) {
-					algorithm.aStarSearch();
-				} else {
-					System.out.println("Available Algorithms: BFS, IDS  A*");
+		try {
+			if(args.length > 0 && args.length < 3) {
+				if(args.length == 1) {
+					System.out.println("Please specify the desire algorithm.");
+					System.out.println("Available Algorithms: BFS, IDS  AS");
+				} else if(args.length == 2) {
+					Graph graph;
+					graph = ReadFile(args[0]);
+					Algorithms algorithm = new Algorithms(graph);
+					if(args[1].equalsIgnoreCase("bfs")) {
+						algorithm.breadthFirst();
+					} else if(args[1].equalsIgnoreCase("ids")) {
+						algorithm.iterativeDeepSearch();
+					} else if(args[1].equalsIgnoreCase("as")) {
+						algorithm.aStarSearch();
+					} else {
+						System.out.println("Available Algorithms: BFS, IDS  AS");
+					}
 				}
+			} else {
+				System.out.println("Please specify the name of the text file along with the desire algorithm.");
+				System.out.println("Available Algorithms: BFS, IDS  AS");
 			}
-		} else {
-			System.out.println("Please specify the name of the text file along with the desire algorithm.");
-			System.out.println("Available Algorithms: BFS, IDS  A*");
-		}*/
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -59,30 +59,29 @@ public class Algorithms {
 			System.out.println();
 		}
 	}
-	
-	/* Total cost for algorithms */
+
+	/** 
+	 * Prints out the total cost for the path found of each algorithms.
+	 * 
+	 * @param graph node being searched.
+	 *  */
 	public void totalCost(Node graph){
 		int totalCost = 0;
 		while(graph.getComingFrom() !=null){
 			graph = graph.getComingFrom();
 			totalCost += graph.getCost();
-			
 		}
 		totalCost += graph.getCost();
 		System.out.println("Path Cost: " + totalCost);
-		
+
 	}
-	
-	
+
 	/** Prints reversed path of given node. */
 	public void findPath(Node graph){
-		if(graph != null){
+		if(graph != null) {
 			findPath(graph.getComingFrom());
 			System.out.print(" (" + graph.getX() + ", " + graph.getY() + ") ");
-			
 		}
-		
-		
 	}
 
 	/** 
@@ -92,9 +91,7 @@ public class Algorithms {
 	public void breadthFirst() {
 		System.out.println("\nBreadth-first search: \n");
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
-		
-		int expandedNodes = 0;															//number of nodes Expanded
-
+		int expandedNodes = 0;
 		PriorityQueue<Node> nexttoVisit =new PriorityQueue<>(new Comparator<Node>(){
 			@Override
 			public int compare(Node fNode, Node sNode){	    //put the smallest in front first
@@ -117,17 +114,16 @@ public class Algorithms {
 
 			if(currentPos.equals(searchSpace.getGoalNode())) {	  //Check if we arrived to the goal
 				System.out.println("\nGoal Found: " + "(" + currentPos.getX() + "," + currentPos.getY() + ")");
-				
+
 				System.out.println();
 				totalCost(searchSpace.getGoalNode());
 				System.out.println("Nodes Expanded: "+(visitedPos.size()-1));
 				System.out.println("Nodes in Mempory, in Queue: "+nexttoVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				//System.out.println("Nodes in Memory: " + visited.size());
 				System.out.print("Path:");
 				findPath(searchSpace.getGoalNode());
 				System.out.println();
-				
+
 				return;
 			}
 
@@ -146,9 +142,9 @@ public class Algorithms {
 			System.out.println("Nodes in memory, in Queue: "+nexttoVisit.size());
 			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
 			System.out.println("Path Sequence: Null");
-			
+
 		}
-		
+
 	}
 
 	/** 
@@ -184,7 +180,7 @@ public class Algorithms {
 		long startTime = System.currentTimeMillis(), endTime = startTime + 180000;
 
 		String nodes = "";
-		
+
 		PriorityQueue<Node> nextToVisit = new PriorityQueue<>(new Comparator<Node>() {
 			@Override
 			public int compare(Node fNode, Node sNode){	    //put the smallest in front first
@@ -204,27 +200,23 @@ public class Algorithms {
 
 			Node current = nextToVisit.remove();
 			visitedNodes.add(current);
-			
+
 			nodes += "(" + current.getX() + "," + current.getY() + ") ";
 
 			if(searchSpace.getGoalNode().equals(current)) {
-				//System.out.println(nodes);
 				stopCurrentAlg = true;
 				System.out.println("\nGoal Found: " + "(" + current.getX() + "," + current.getY() + ")");
-				
 				System.out.println();
 				totalCost(searchSpace.getGoalNode());
 				System.out.println("Nodes Expanded: "+(visitedNodes.size()-1));
 				System.out.println("Nodes in memory, in Queue: "+nextToVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				//System.out.println("Nodes in Memory: " + visited.size());
 				System.out.print("Path:");
 				findPath(searchSpace.getGoalNode());
 				System.out.println();
-				
 				return nodesExpanded;
 			}
-			
+
 			for(Node successor : searchSpace.generateSuccessorsIDS(current, visitedNodes)) {
 				if(!visitedNodes.contains(successor)) {
 					successor.setDepth(current.getDepth() + 1);
@@ -240,7 +232,7 @@ public class Algorithms {
 			System.out.println("Not visited yet but in Queue: "+nextToVisit.size());
 			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
 			System.out.println("Path Sequence: Null");
-			
+
 		}
 		System.out.println(nodes + "Depth " + limit);
 		return nodesExpanded;
@@ -294,13 +286,11 @@ public class Algorithms {
 							") Value: " + node.getF() + " mahattan: " + node.getH() + 
 							" path cost to the node: " + node.getG() + " cost: " + node.getCost());
 				}
-				//visited.add(nextToVisit.get(0));
 				System.out.println();
 				System.out.println("Path Cost: "+searchSpace.getGoalNode().getG());
 				System.out.println("Nodes Expanded: "+(visited.size()-1));
 				System.out.println("Nodes in Memory, in Queue: "+nextToVisit.size());
 				System.out.println("Runtime: " + (System.currentTimeMillis() - startTime) + " ms");
-				//System.out.println("Nodes in Memory: " + visited.size());
 				System.out.print("Path:");
 				findPath(searchSpace.getGoalNode());
 				System.out.println();
@@ -313,7 +303,7 @@ public class Algorithms {
 			System.out.println("Nodes in memory, in Queue: "+nextToVisit.size());
 			System.out.println("Running Time: "+ (System.currentTimeMillis() - startTime) + " ms");
 			System.out.println("Path Sequence: Null");
-			
+
 		}
 	}
 }
